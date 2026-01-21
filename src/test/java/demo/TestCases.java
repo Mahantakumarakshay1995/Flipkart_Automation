@@ -14,9 +14,14 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+
+import javax.xml.xpath.XPath;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import org.testng.Assert;
+
 
 
 
@@ -27,8 +32,7 @@ public class TestCases {
     ChromeDriver driver;
 
     /*
-     * TODO: Write your tests here with testng @Test annotation. 
-     * Follow `testCase01` `testCase02`... format or what is provided in instructions
+     * get washing machine whose popularity rating is more than 4 and give number how many product is there in the 1st page
      */
     @Test
     public void testCase01() throws InterruptedException {
@@ -45,12 +49,13 @@ public class TestCases {
         Thread.sleep(3000);
 
         List<WebElement> listOfRatings=driver.findElements(By.xpath("//div[@class='MKiFS6']//parent::span"));
-        int  count=Wrappers.getAllRatingUnderNumber(listOfRatings,4.0);
-        System.out.println("Number of count below 4 is:"+count);
+       Boolean result  =Wrappers.getAllRatingUnderNumber(listOfRatings,4.0);
+        Assert.assertTrue(result);
 
 
     }
-
+    /*search iphone click on filter- 10% or more and print title and discount percantage
+     */
      @Test
     public void testCase02() throws InterruptedException {
         driver.get("https://www.flipkart.com/");
@@ -70,6 +75,9 @@ public class TestCases {
         Wrappers.getAllDiscountabove(offelements, 17,driver);
 
     }
+    /*
+    enter coffe mug get title,image url,and rating of 1st five element
+     */
 
     @Test
     public void testCase03() throws InterruptedException {
@@ -112,6 +120,46 @@ public class TestCases {
             rating.add(ratingtext);
             System.out.println("Rating  is : " + (i+1) + ":" + ratingtext);
         }
+        
+
+    }
+    /*
+        Testcase for enter iphone and check 5 percent more discounted product and get title
+    */
+     @Test(enabled = true)
+    public void testCase04() throws InterruptedException {
+        driver.get("https://www.flipkart.com/");
+        WebElement search =driver.findElement(By.xpath("//input[@name='q']"));
+        Wrappers.findSearchAndClick(search,"iPhone");
+        Thread.sleep(2000);
+        System.out.println("Wait1");
+        int discount=5;
+       Boolean result =Wrappers.findDiscountPercantageAndTitle(By.xpath("//div[@class='HQe8jr']//span"),driver, discount);
+        Assert.assertTrue(result);
+
+    }
+    /*
+    get the highest 5 review in descending order and print Title and image URL
+    */
+    @Test
+    public void testCase05() throws InterruptedException {
+        System.out.println("START TC 5");
+        driver.get("https://www.flipkart.com/");
+        WebElement search =driver.findElement(By.xpath("//input[@name='q']"));
+        Wrappers.findSearchAndClick(search,"Coffee Mug");
+        Thread.sleep(5000);
+        System.out.println("Wait1");
+
+        WebElement ratingButton =driver.findElement(By.xpath("//div[contains(text(),'4') and contains(text(),'above')]"));
+        Wrappers.waitTillClicakable(ratingButton,driver);
+        Wrappers.clickOnFilter(ratingButton);
+        Thread.sleep(2000);
+        System.out.println("Wait2");
+
+        Boolean result=Wrappers.printTitleAndImageUrlOfCoffeMug(By.xpath("//span[@class='PvbNMB']"),driver);
+        Assert.assertTrue(result);
+        System.out.println("End of TC5");
+
         
 
     }
